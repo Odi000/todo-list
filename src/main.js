@@ -1,21 +1,35 @@
+//All created to-do's go here
+class AllTodos {
+    constructor() {
+        this.todoLibrary = [];
+    }
+    addTodo(todo) {
+        this.todoLibrary.push(todo);
+    }
+}
+
+const allTodos = new AllTodos();
+
 class CreateTodo {
-    constructor(name, description, date, color, parentList) {
+    constructor(name, description, date, color, parentListId) {
         this.name = name;
         this.description = description;
         this.date = date;
         this.color = color;
-        this.parentList = parentList;
+        this.parentListId = parentListId;
     }
 }
+
 
 class TodoLists {
     constructor(name, color) {
         this.name = name;
         this.color = color;
-        this.todos = [];
-    };
-    addTodo(todo) {
-        this.todos.push(todo);
+        this.id = Math.floor(Math.random()*10000);
+    }
+    get todos() {
+        const todos = allTodos.todoLibrary.filter(todo => todo.parentListId == this.id);
+        return todos;
     }
 }
 
@@ -52,18 +66,20 @@ class Calendar {
         this.name = "Calendar";
         this.todos = [];
     }
-    parseTodos(date) {
+    parseTodos(selectedDate) {
+        const date = new Date(selectedDate);
         this.todos = todoLibrary.filter(todo => {
             if (
-                todo.date.getYear() === today.getYear() &&
-                todo.date.getMonth() === today.getMonth() &&
-                todo.date.getDate() === today.getMonth()
+                todo.date.getYear() === date.getYear() &&
+                todo.date.getMonth() === date.getMonth() &&
+                todo.date.getDate() === date.getMonth()
             ) return true;
         });
     }
 }
 
-const todoLibrary = [];
+
+
 
 // array ose objekt me universal todos dmth me tetana
 // edhe per tkriju listat e vecanta thjest futu nje class te perbashket si i lidh me listen kurse me datat filtro datat
