@@ -1,3 +1,5 @@
+/*-- App Logic --*/
+
 //All created to-do's go here
 class AllTodos {
     constructor() {
@@ -7,8 +9,6 @@ class AllTodos {
         this.todoLibrary.push(todo);
     }
 }
-
-const allTodos = new AllTodos();
 
 class CreateTodo {
     constructor(name, description, date, color, parentListId) {
@@ -21,17 +21,6 @@ class CreateTodo {
 }
 
 
-class TodoLists {
-    constructor(name, color) {
-        this.name = name;
-        this.color = color;
-        this.id = Math.floor(Math.random()*10000);
-    }
-    get todos() {
-        const todos = allTodos.todoLibrary.filter(todo => todo.parentListId == this.id);
-        return todos;
-    }
-}
 
 class Tasks {
     constructor(upcoming, today, calendar) {
@@ -41,17 +30,17 @@ class Tasks {
     }
 }
 
+//to create Today Todos object I used function syntax 
 function TodayTodos() {
     const name = "Today";
     const today = new Date();
-    const todos = [];
 
     const getTodos = () => {
-        return todoLibrary.filter(todo => {
+        return allTodos.todoLibrary.filter(todo => {
             if (
-                todo.date.getYear() === today.getYear() &&
+                todo.date.getFullYear() === today.getFullYear() &&
                 todo.date.getMonth() === today.getMonth() &&
-                todo.date.getDate() === today.getMonth()
+                todo.date.getDate() === today.getDate()
             ) return true;
         });
     }
@@ -64,22 +53,47 @@ function TodayTodos() {
 class Calendar {
     constructor() {
         this.name = "Calendar";
-        this.todos = [];
     }
-    parseTodos(selectedDate) {
+    getTodos(selectedDate) {
         const date = new Date(selectedDate);
-        this.todos = todoLibrary.filter(todo => {
+        return allTodos.todoLibrary.filter(todo => {
             if (
-                todo.date.getYear() === date.getYear() &&
+                todo.date.getFullYear() === date.getFullYear() &&
                 todo.date.getMonth() === date.getMonth() &&
-                todo.date.getDate() === date.getMonth()
+                todo.date.getDate() === date.getDate()
             ) return true;
         });
     }
 }
 
+class TodoLists {
+    constructor(name, color) {
+        this.name = name;
+        this.color = color;
+        this.id = Math.floor(Math.random() * 10000);
+    }
+    get todos() {
+        const todos = allTodos.todoLibrary.filter(todo => todo.parentListId == this.id);
+        return todos;
+    }
+}
+
+//tests
+const allTodos = new AllTodos();
+
+const first = new CreateTodo('sot', 'todoja duhet ba sot', new Date())
+const second = new CreateTodo('neser', 'todoja duhet ba neser', new Date('2023-08-11'))
+
+allTodos.todoLibrary.push(first);
+allTodos.todoLibrary.push(second);
+
+const neser = new Calendar()
+
+neser.getTodos('2023-08-11')
+
+//*--- Application User Interface ---*/
 
 
-
-// array ose objekt me universal todos dmth me tetana
-// edhe per tkriju listat e vecanta thjest futu nje class te perbashket si i lidh me listen kurse me datat filtro datat
+// event listenerin e opsioneve ne menu lidhe me menun edhe meqenese
+// ne siperfaqe jane opsionet duke perdor e.target === obj.name hap 
+// opsionin e caktum
