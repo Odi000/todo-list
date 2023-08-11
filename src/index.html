@@ -1,27 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="./styles.css">
     <script defer src="./main.js"></script>
-    <link rel="stylesheet" href="./styles.css"></link>
+    </link>
 </head>
+
 <body>
     <div id="container">
         <div class="menu-bar">
-            <h1>Menu</h1> <!-- dont forget to create hamburger menu-->
+            <div class="hamburger">
+                <h1>Menu</h1>
+                <img src="./icons/menu.svg">
+            </div>
+            <div class="search-bar">
+                <img src="./icons/magnifying-glass.svg">
+                <input type="text" placeholder="Search">
+            </div>
             <div class="tasks">
                 <h2>Tasks</h2>
-                <button><img src="./icons/fast-forward.png">Upcoming</button>
-                <button><img src="./icons/today.svg">Today</button>
-                <button><img src="./icons/calendar.svg">Calendar</button>
+                <div><img src="./icons/fast-forward.svg">
+                    <div>Upcoming</div>
+                </div>
+                <div><img src="./icons/today.svg">
+                    <div>Today</div>
+                </div>
+                <div><img src="./icons/calendar.svg">
+                    <div>Calendar</div>
+                </div>
             </div>
             <div class="lists">
                 <h2>Lists</h2>
-                <button>Personal</button>
-                <button>Work</button>
-                <button>List 1</button>
+                <div>
+                    <div class="square"></div>
+                    <div>Personal</div>
+
+                </div>
+                <div>
+                    <div class="square"></div>
+                    <div>Work</div>
+                </div>
+                <div>
+                    <div class="square"></div>
+                    <div>List 1</div>
+                </div>
+            </div>
+            <div class="bottom">
+                <div>
+                    <img src="./icons/setting-lines.svg">
+                    <p>Settings</p>
+                </div>
+                <div>
+                    <img src="./icons/logout.svg">
+                    <p>Sign out</p>
+                </div>
             </div>
         </div>
         <div class="content">
@@ -48,4 +87,5 @@
         </div>
     </div>
 </body>
+
 </html>

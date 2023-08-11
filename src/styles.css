@@ -1,33 +1,151 @@
-:root{
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
+:root {
+    font-family: 'Rubik', sans-serif;
     font-size: 10px;
+    --main-bkg-clr: #FAFAFA;
+    --menu-bkg-clr: #F4F4F4;
+    --icons-clr: invert(52%) sepia(0%) saturate(167%) hue-rotate(217deg) brightness(92%) contrast(87%);
 }
 
-*,*::after,*::before{
+*,
+*::after,
+*::before {
     box-sizing: border-box;
     margin: 0;
 }
 
-body{
+body {
     background-color: rgb(31, 31, 31);
     color: whitesmoke;
 }
 
 #container {
     display: grid;
-    grid-template-columns: 1fr 3fr;
+    grid-template-columns: 300px 3fr;
     width: 100%;
+    height: 100vh;
+    gap: 1.8rem;
 }
 
 img {
-    width: 2rem;
+    width: 1.6rem;
+    filter: var(--icons-clr);
 }
 
+h1 {
+    font-size: 2.4rem;
+}
+
+h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+/*-- Menu --*/
 .menu-bar {
+    position: relative;
     background-color: rgba(255, 255, 255, 0.209);
+    margin: 1.8rem 0 1.8rem 1.8rem;
+    padding: 1.4rem;
+    border-radius: 1.4rem;
 }
 
+.menu-bar>*:not(:last-child) {
+    margin-bottom: 2rem;
+}
+
+.hamburger {
+    display: flex;
+    justify-content: space-between;
+}
+
+.hamburger
+img {
+    cursor: pointer;
+    width: 2.2rem;
+}
+
+.search-bar {
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: .6rem;
+    display: flex;
+    align-items: center;
+    padding: .6rem 1rem;
+    gap: .6rem;
+}
+
+.search-bar
+img {
+    width: 1.8rem;
+}
+
+input {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 600;
+    font-size: 1.4rem;
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+
+.tasks,
+.lists {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.tasks>*:not(:first-child),
+.lists>*:not(:first-child),
+.bottom>* {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: .9rem 1rem;
+    border-radius: 6px;
+}
+
+.tasks>*:not(:first-child):hover,
+.lists>*:not(:first-child):hover,
+.bottom>*:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.tasks>*:not(:first-child):active,
+.lists>*:not(:first-child):active,
+.bottom>*:active {
+    background-color: rgba(0, 0, 0, 0.15);
+    font-weight: bold;
+}
+
+div {
+    font-size: 1.6rem;
+    padding: 0;
+}
+
+.square {
+    width: 1.8rem;
+    height: 1.8rem;
+    background-color: rgb(183, 14, 14);
+    border-radius: .4rem;
+}
+
+.bottom {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 1rem;
+}
+
+p {
+    font-size: 1.6rem;
+}
+
+
+
+/*-- Content --*/
 .content {
     background-color: rgba(255, 0, 0, 0.277);
+    margin: 1.8rem 1.8rem 1.8rem 0;
 }
 
 button {
