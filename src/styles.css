@@ -1,9 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
+
 :root {
     font-family: 'Rubik', sans-serif;
     font-size: 10px;
     --main-bkg-clr: #FAFAFA;
-    --menu-bkg-clr: #F4F4F4;
+    --menu-bkg-clr: rgb(230, 230, 230);
+    --font-clr: #282828;
+    --cntr-padding: 1.4rem;
     --icons-clr: invert(52%) sepia(0%) saturate(167%) hue-rotate(217deg) brightness(92%) contrast(87%);
 }
 
@@ -15,8 +18,8 @@
 }
 
 body {
-    background-color: rgb(31, 31, 31);
-    color: whitesmoke;
+    background-color: var(--main-bkg-clr);
+    color: var(--font-clr);
 }
 
 #container {
@@ -32,7 +35,8 @@ img {
     filter: var(--icons-clr);
 }
 
-h1 {
+h1,
+.sticker > h2 {
     font-size: 2.4rem;
 }
 
@@ -44,9 +48,9 @@ h2 {
 /*-- Menu --*/
 .menu-bar {
     position: relative;
-    background-color: rgba(255, 255, 255, 0.209);
+    background-color: var(--menu-bkg-clr);
     margin: 1.8rem 0 1.8rem 1.8rem;
-    padding: 1.4rem;
+    padding: var(--cntr-padding);
     border-radius: 1.4rem;
 }
 
@@ -59,8 +63,7 @@ h2 {
     justify-content: space-between;
 }
 
-.hamburger
-img {
+.hamburger img {
     cursor: pointer;
     width: 2.2rem;
 }
@@ -74,8 +77,7 @@ img {
     gap: .6rem;
 }
 
-.search-bar
-img {
+.search-bar img {
     width: 1.8rem;
 }
 
@@ -98,6 +100,7 @@ input {
 .bottom>* {
     cursor: pointer;
     user-select: none;
+    position: relative;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -129,6 +132,16 @@ div {
     background-color: rgb(183, 14, 14);
     border-radius: .4rem;
 }
+.counter {
+    position: absolute;
+    right: 1rem;
+    background-color: #00000059;
+    padding: .2rem 0;
+    font-size: 1.4rem;
+    width: 2.6rem;
+    border-radius: 3px;
+    text-align: center;
+}
 
 .bottom {
     position: absolute;
@@ -144,12 +157,66 @@ p {
 
 /*-- Content --*/
 .content {
-    background-color: rgba(255, 0, 0, 0.277);
     margin: 1.8rem 1.8rem 1.8rem 0;
+    display: flex;
+    flex-direction: column;
 }
 
-button {
-    display: block;
-    background-color: transparent;
-    border: none;
+.content h1 {
+    font-size: 4.8rem;
+    margin-bottom: 3.6rem;
+}
+
+.stickers {
+    height: 81vh;
+    overflow: auto;
+    border: 1px solid #d2d2d2;
+    border-radius: 1.4rem;
+    padding: var(--cntr-padding);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+    gap: 1.4rem;
+}
+
+.stickers>* {
+    background-color: rgba(0, 128, 0, 0.4);
+    border-radius: 1rem;
+    min-height: 25rem;
+    height: fit-content;
+    padding: var(--cntr-padding);
+    box-shadow: 
+    2px 4px 4px rgba(0,0,0,0.10),
+    4px 8px 8px rgba(0,0,0,0.08);
+}
+
+.sticker > h2 {
+    margin-bottom: 1rem;
+}
+
+.new-sticker {
+    position: relative;
+    background-color: rgb(215, 215, 215);
+}
+
+.circle {
+    user-select: none;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: grid;
+    place-items: center;
+    width: 12rem;
+    height: 12rem;
+    border-radius: 50%;
+    background-color: white;
+    font-size: 9.6rem;
+    font-weight: 300;
+    background-color: inherit;
+    transition: background .1s linear;  
+}
+
+.circle:hover {
+    background-color: rgb(190, 190, 190);
 }
