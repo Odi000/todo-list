@@ -26,17 +26,17 @@
             </div>
             <div class="tasks">
                 <h2>Tasks</h2>
-                <div>
+                <div id="upcoming">
                     <img src="./icons/fast-forward.svg">
                     <div>Upcoming</div>
                     <div class="counter">5</div>
                 </div>
-                <div>
+                <div id="today">
                     <img src="./icons/today.svg">
                     <div>Today</div>
                     <div class="counter">0</div>
                 </div>
-                <div>
+                <div id="calendar">
                     <img src="./icons/calendar.svg">
                     <div>Calendar</div>
                 </div>
@@ -58,6 +58,11 @@
                     <div>List 1</div>
                     <div class="counter">4</div>
                 </div>
+                <div id="add-new-list">
+                    <img src="./icons/plus.png">
+                    <div>Add New List</div>
+                </div>
+
             </div>
             <div class="bottom">
                 <div>
@@ -75,7 +80,9 @@
             <div class="stickers">
                 <div class="sticker">
                     <h2>Social Media</h2>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat repudiandae veniam tenetur incidunt asperiores ipsam voluptatum eveniet in. Consectetur quam soluta, rerum excepturi facere vitae aliquid maiores neque sapiente est?</p>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat repudiandae veniam tenetur
+                        incidunt asperiores ipsam voluptatum eveniet in. Consectetur quam soluta, rerum excepturi facere
+                        vitae aliquid maiores neque sapiente est?</p>
                 </div>
                 <div class="sticker">
                     <h2></h2>
@@ -90,7 +97,34 @@
                     <p></p>
                 </div>
                 <div class="new-sticker">
-                    <div class="circle">+</div>
+                    <div class="circle">
+                        <img src="./icons/plus.png">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="new-sticker-form">
+            <h1>Create New Task</h1>
+            <div>
+                <div>
+                    <p>Title:</p>
+                    <input type="text">
+                </div>
+                <div>
+                    <p>Description:</p>
+                    <input type="text">
+                </div>
+                <div>
+                    <p>Deadline:</p>
+                    <input type="date">
+                </div>
+                <div>
+                    <p>Color:</p>
+                    <input type="color">
+                </div>
+                <div class="buttons">
+                    <button class="add">Add</button>
+                    <button class="cancel">Cancel</button>
                 </div>
             </div>
         </div>

@@ -7,6 +7,10 @@
     --menu-bkg-clr: rgb(230, 230, 230);
     --font-clr: #282828;
     --cntr-padding: 1.4rem;
+    --border: 1px solid #d2d2d2;
+    --box-shadow:
+    2px 4px 4px rgba(0,0,0,0.10),
+    4px 8px 8px rgba(0,0,0,0.08);
     --icons-clr: invert(52%) sepia(0%) saturate(167%) hue-rotate(217deg) brightness(92%) contrast(87%);
 }
 
@@ -170,7 +174,7 @@ p {
 .stickers {
     height: 81vh;
     overflow: auto;
-    border: 1px solid #d2d2d2;
+    border: var(--border);
     border-radius: 1.4rem;
     padding: var(--cntr-padding);
     display: grid;
@@ -184,9 +188,7 @@ p {
     min-height: 25rem;
     height: fit-content;
     padding: var(--cntr-padding);
-    box-shadow: 
-    2px 4px 4px rgba(0,0,0,0.10),
-    4px 8px 8px rgba(0,0,0,0.08);
+    box-shadow: var(--box-shadow);
 }
 
 .sticker > h2 {
@@ -194,13 +196,13 @@ p {
 }
 
 .new-sticker {
+    user-select: none;
+    cursor: pointer;
     position: relative;
     background-color: rgb(215, 215, 215);
 }
 
 .circle {
-    user-select: none;
-    cursor: pointer;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -210,13 +212,92 @@ p {
     width: 12rem;
     height: 12rem;
     border-radius: 50%;
-    background-color: white;
-    font-size: 9.6rem;
-    font-weight: 300;
     background-color: inherit;
     transition: background .1s linear;  
 }
 
-.circle:hover {
+.new-sticker:hover
+.circle {
     background-color: rgb(190, 190, 190);
 }
+
+.new-sticker
+img {
+    width: 60%;
+    filter: none;
+}
+
+/* Add new sticker form*/
+
+#new-sticker-form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background-color: var(--menu-bkg-clr);
+    padding: 2rem;
+    border: var(--border);
+    border-radius: 1.6rem;
+    box-shadow: var(--box-shadow);
+}
+
+#new-sticker-form
+h1 {
+    text-align: center;
+    margin-bottom: 3.2rem;
+}
+
+#new-sticker-form>div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+#new-sticker-form>div
+div {
+    display: flex;
+    gap: 1.2rem;
+    align-items: center;
+}
+
+#new-sticker-form
+input {
+    background-color: white;
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+
+.buttons {
+    grid-column: 1/3;
+    margin: 0 auto;
+    padding-top: 1.2rem;
+    gap: 1.6rem !important;
+}
+
+.buttons
+button {
+    width: 9.6rem;
+    padding: .8rem 0;
+    border-radius: .6rem;
+    border: var(--border);
+}
+
+.add {
+    background-color: #aaffaa;
+    border: 1px solid #99dd99;
+}
+
+.add:hover {
+    background-color: #a6f0a6;
+}
+
+.cancel {
+    background-color: #ffbebe;
+    border: 1px solid #eeadad;
+}
+
+.cancel:hover {
+    background-color: #f5b2b2;
+}
+
+/* Mos harro bottom padding te tasks edhe lists */

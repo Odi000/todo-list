@@ -78,22 +78,108 @@ class TodoLists {
     }
 }
 
-//tests
-const allTodos = new AllTodos();
-
-const first = new CreateTodo('sot', 'todoja duhet ba sot', new Date())
-const second = new CreateTodo('neser', 'todoja duhet ba neser', new Date('2023-08-11'))
-
-allTodos.todoLibrary.push(first);
-allTodos.todoLibrary.push(second);
-
-const neser = new Calendar()
-
-neser.getTodos('2023-08-11')
 
 //*--- Application User Interface ---*/
+
+function screenController() {
+    const allTodos = new AllTodos();
+    const todayTodos = TodayTodos();
+    const calendar = new Calendar();
+    const upcoming = document.getElementById('upcoming');
+    const today = document.getElementById('today');
+    const calendarDiv = document.getElementById('calendar');
+    const stickers = document.querySelector('.stickers');
+    const newStickerBtn = document.querySelector('.new-sticker');
+    const addNewListBtn = document.querySelector('#add-new-list');
+
+    function addNewTaskForm() {
+        const newTaskDiv = document.createElement('div');
+        newTaskDiv.id = "new-sticker-form";
+
+        const h1 = document.createElement('h1');
+        h1.textContent = "Create New Task";
+
+        const formDiv = document.createElement('div');
+
+        const titleDiv = document.createElement('div');
+        const titleP = document.createElement('p');
+        const titleInput = document.createElement('input');
+        titleP.textContent = "Title:";
+        titleInput.type = "text";
+        titleDiv.appendChild(titleP);
+        titleDiv.appendChild(titleInput);
+
+        const descDiv = document.createElement('div');
+        const descP = document.createElement('p');
+        const descInput = document.createElement('input');
+        descP.textContent = "Description:";
+        descInput.type = "text";
+        descDiv.appendChild(descP);
+        descDiv.appendChild(descInput);
+
+        const dateDiv = document.createElement('div');
+        const dateP = document.createElement('p');
+        const dateInput = document.createElement('input');
+        dateP.textContent = "Deadline:";
+        dateInput.type = "date";
+        dateDiv.appendChild(dateP);
+        dateDiv.appendChild(dateInput);
+
+        const colorDiv = document.createElement('div');
+        const colorP = document.createElement('p');
+        const colorInput = document.createElement('input');
+        colorP.textContent = "Color:";
+        colorInput.type = "color";
+        colorDiv.appendChild(colorP);
+        colorDiv.appendChild(colorInput);
+
+        const buttonsDiv = document.createElement('div');
+        buttonsDiv.classList.add('buttons');
+        const addBtn = document.createElement('button');
+        const cancelBtn = document.createElement('button');
+        addBtn.classList.add('add');
+        addBtn.textContent = "Add";
+        cancelBtn.classList.add('cancel');
+        cancelBtn.textContent = "Cancel";
+        buttonsDiv.appendChild(addBtn);
+        buttonsDiv.appendChild(cancelBtn);
+
+        formDiv.appendChild(titleDiv);
+        formDiv.appendChild(descDiv);
+        formDiv.appendChild(dateDiv);
+        formDiv.appendChild(colorDiv);
+        formDiv.appendChild(buttonsDiv);
+
+        newTaskDiv.appendChild(h1);
+        newTaskDiv.appendChild(formDiv);
+
+        return newTaskDiv;
+    }
+
+    // newStickerBtn.onclick = () => {
+    //     const newTodo = new CreateTodo(prompt('Title:'), prompt('Descrition'), new Date(prompt('Enter Dead-line:')), 'red')
+    //     allTodos.todoLibrary.push(newTodo);
+
+    //     const todoDiv = document.createElement('div')
+    //     const todoTitle = document.createElement('h2')
+    //     const todoDescription = document.createElement('p')
+
+    //     todoTitle.textContent = newTodo.name;
+    //     todoDescription.textContent = newTodo.description;
+
+    //     todoDiv.appendChild(todoTitle);
+    //     todoDiv.appendChild(todoDescription);
+    //     todoDiv.style.backgroundColor = newTodo.color;
+    //     todoDiv.classList.add('sticker');
+    //     stickers.appendChild(todoDiv);
+    // }
+    return addNewTaskForm();
+}
+
+// screenController()
 
 
 // event listenerin e opsioneve ne menu lidhe me menun edhe meqenese
 // ne siperfaqe jane opsionet duke perdor e.target === obj.name hap 
 // opsionin e caktum
+// Mos harro butonin completed edhe delete
