@@ -3,10 +3,13 @@
 //All created to-do's go here
 class AllTodos {
     constructor() {
-        this.todoLibrary = [];
-    }
-    addTodo(todo) {
-        this.todoLibrary.push(todo);
+        const todoLibrary = [];
+
+        this.addTodo = (todo) => {
+            this.todoLibrary.push(todo);
+        }
+
+        this.getTodos = () => todoLibrary;
     }
 }
 
@@ -21,22 +24,22 @@ class CreateTodo {
 }
 
 
-
-class Tasks {
-    constructor(upcoming, today, calendar) {
-        this.upcoming = upcoming;
-        this.today = today;
-        this.calendar = calendar;
-    }
-}
+//Might remove this
+// class Tasks {
+//     constructor(upcoming, today, calendar) {
+//         this.upcoming = upcoming;
+//         this.today = today;
+//         this.calendar = calendar;
+//     }
+// }
 
 //to create Today Todos object I used function syntax 
 function TodayTodos() {
-    const name = "Today";
+    const id = "today";
     const today = new Date();
 
     const getTodos = () => {
-        return allTodos.todoLibrary.filter(todo => {
+        return allTodos.getTodos().filter(todo => {
             if (
                 todo.date.getFullYear() === today.getFullYear() &&
                 todo.date.getMonth() === today.getMonth() &&
@@ -46,17 +49,17 @@ function TodayTodos() {
     }
 
     return {
-        name, getTodos
+        id, getTodos
     }
 }
 
 class Calendar {
     constructor() {
-        this.name = "Calendar";
+        this.id = "calendar";
     }
     getTodos(selectedDate) {
         const date = new Date(selectedDate);
-        return allTodos.todoLibrary.filter(todo => {
+        return allTodos.getTodos().filter(todo => {
             if (
                 todo.date.getFullYear() === date.getFullYear() &&
                 todo.date.getMonth() === date.getMonth() &&
@@ -72,25 +75,48 @@ class TodoLists {
         this.color = color;
         this.id = Math.floor(Math.random() * 10000);
     }
-    get todos() {
-        const todos = allTodos.todoLibrary.filter(todo => todo.parentListId == this.id);
+    getTodos() {
+        const todos = allTodos.getTodos().filter(todo => todo.parentListId == this.id);
         return todos;
     }
 }
 
 
 //*--- Application User Interface ---*/
+screenController()
 
 function screenController() {
     const allTodos = new AllTodos();
     const todayTodos = TodayTodos();
     const calendar = new Calendar();
-    const upcoming = document.getElementById('upcoming');
-    const today = document.getElementById('today');
+    const upcomingDiv = document.getElementById('upcoming');
+    const todayDiv = document.getElementById('today');
     const calendarDiv = document.getElementById('calendar');
     const stickers = document.querySelector('.stickers');
     const newStickerBtn = document.querySelector('.new-sticker');
     const addNewListBtn = document.querySelector('#add-new-list');
+    const tabs = [
+        todayTodos,
+        calendar
+    ]
+    const tabNodes = [
+        upcomingDiv,
+        todayDiv,
+        calendarDiv
+    ];
+
+    tabNodes.forEach(node => node.onclick = populateSelectedWindow);
+
+    function populateSelectedWindow() {
+        const selectedTabNode = tabNodes.find(tabNode => {
+            return tabNode.classList.contains("selected");
+        })
+        const todos = selectedTabNode.dataset.id === "upcoming" ?
+        allTodos :
+        tabs.find(tab => tab.id === selectedTabNode.dataset.id);
+        
+        console.log(todos);
+    }
 
     function addNewTaskForm() {
         const newTaskDiv = document.createElement('div');
@@ -120,8 +146,12 @@ function screenController() {
         const dateDiv = document.createElement('div');
         const dateP = document.createElement('p');
         const dateInput = document.createElement('input');
+        const yearToday = new Date().getFullYear();
+        const monthToday = new Date().getMonth() + 1 < 10 ? "0" + (new Date().getMonth() + 1) : new Date().getMonth() + 1;
+        const dateToday = new Date().getDate() < 10 ? "0" + new Date().getDate() : new Date().getDate();
         dateP.textContent = "Deadline:";
         dateInput.type = "date";
+        dateInput.min = `${yearToday}-${monthToday}-${dateToday}`;
         dateDiv.appendChild(dateP);
         dateDiv.appendChild(dateInput);
 
@@ -156,6 +186,18 @@ function screenController() {
         return newTaskDiv;
     }
 
+    function createSicker(todo) {
+        const todoDiv = createElement('div');
+        const todoName = createElement('h2');
+        const todoDescr = createElement('p');
+
+        todoName.textContent = todo.name;
+        todoDescr.textContent = todo.description;
+
+        todoDiv.appendChild(todoName);
+        todoDiv.appendChild(todoDescr);
+    }
+
     // newStickerBtn.onclick = () => {
     //     const newTodo = new CreateTodo(prompt('Title:'), prompt('Descrition'), new Date(prompt('Enter Dead-line:')), 'red')
     //     allTodos.todoLibrary.push(newTodo);
@@ -173,7 +215,6 @@ function screenController() {
     //     todoDiv.classList.add('sticker');
     //     stickers.appendChild(todoDiv);
     // }
-    return addNewTaskForm();
 }
 
 // screenController()

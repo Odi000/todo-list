@@ -9,8 +9,8 @@
     --cntr-padding: 1.4rem;
     --border: 1px solid #d2d2d2;
     --box-shadow:
-    2px 4px 4px rgba(0,0,0,0.10),
-    4px 8px 8px rgba(0,0,0,0.08);
+        2px 4px 4px rgba(0, 0, 0, 0.10),
+        4px 8px 8px rgba(0, 0, 0, 0.08);
     --icons-clr: invert(52%) sepia(0%) saturate(167%) hue-rotate(217deg) brightness(92%) contrast(87%);
 }
 
@@ -40,7 +40,7 @@ img {
 }
 
 h1,
-.sticker > h2 {
+.sticker>h2 {
     font-size: 2.4rem;
 }
 
@@ -118,9 +118,14 @@ input {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-.tasks>*:not(:first-child):active,
+/* .tasks>*:not(:first-child):active,
 .lists>*:not(:first-child):active,
 .bottom>*:active {
+    background-color: rgba(0, 0, 0, 0.15);
+    font-weight: bold;
+} */
+
+.selected {
     background-color: rgba(0, 0, 0, 0.15);
     font-weight: bold;
 }
@@ -136,6 +141,7 @@ div {
     background-color: rgb(183, 14, 14);
     border-radius: .4rem;
 }
+
 .counter {
     position: absolute;
     right: 1rem;
@@ -191,7 +197,7 @@ p {
     box-shadow: var(--box-shadow);
 }
 
-.sticker > h2 {
+.sticker>h2 {
     margin-bottom: 1rem;
 }
 
@@ -213,16 +219,14 @@ p {
     height: 12rem;
     border-radius: 50%;
     background-color: inherit;
-    transition: background .1s linear;  
+    transition: background .1s linear;
 }
 
-.new-sticker:hover
-.circle {
+.new-sticker:hover .circle {
     background-color: rgb(190, 190, 190);
 }
 
-.new-sticker
-img {
+.new-sticker img {
     width: 60%;
     filter: none;
 }
@@ -233,7 +237,7 @@ img {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     background-color: var(--menu-bkg-clr);
     padding: 2rem;
     border: var(--border);
@@ -241,8 +245,7 @@ img {
     box-shadow: var(--box-shadow);
 }
 
-#new-sticker-form
-h1 {
+#new-sticker-form h1 {
     text-align: center;
     margin-bottom: 3.2rem;
 }
@@ -253,15 +256,13 @@ h1 {
     gap: 2rem;
 }
 
-#new-sticker-form>div
-div {
+#new-sticker-form>div div {
     display: flex;
     gap: 1.2rem;
     align-items: center;
 }
 
-#new-sticker-form
-input {
+#new-sticker-form input {
     background-color: white;
     font-size: 1.5rem;
     font-weight: 400;
@@ -274,8 +275,7 @@ input {
     gap: 1.6rem !important;
 }
 
-.buttons
-button {
+.buttons button {
     width: 9.6rem;
     padding: .8rem 0;
     border-radius: .6rem;
