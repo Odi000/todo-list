@@ -6,7 +6,7 @@ class AllTodos {
         const todoLibrary = [];
 
         this.addTodo = (todo) => {
-            this.todoLibrary.push(todo);
+            todoLibrary.push(todo);
         }
 
         this.getTodos = () => todoLibrary;
@@ -38,7 +38,7 @@ function TodayTodos() {
     const id = "today";
     const today = new Date();
 
-    const getTodos = () => {
+    const getTodos = (allTodos) => {
         return allTodos.getTodos().filter(todo => {
             if (
                 todo.date.getFullYear() === today.getFullYear() &&
@@ -57,7 +57,7 @@ class Calendar {
     constructor() {
         this.id = "calendar";
     }
-    getTodos(selectedDate) {
+    getTodos(allTodos, selectedDate) {
         const date = new Date(selectedDate);
         return allTodos.getTodos().filter(todo => {
             if (
@@ -75,7 +75,7 @@ class TodoLists {
         this.color = color;
         this.id = Math.floor(Math.random() * 10000);
     }
-    getTodos() {
+    getTodos(allTodos) {
         const todos = allTodos.getTodos().filter(todo => todo.parentListId == this.id);
         return todos;
     }
@@ -89,6 +89,7 @@ function screenController() {
     const allTodos = new AllTodos();
     const todayTodos = TodayTodos();
     const calendar = new Calendar();
+    const menuDiv = document.querySelector('.menu-bar');
     const upcomingDiv = document.getElementById('upcoming');
     const todayDiv = document.getElementById('today');
     const calendarDiv = document.getElementById('calendar');
@@ -105,17 +106,49 @@ function screenController() {
         calendarDiv
     ];
 
-    tabNodes.forEach(node => node.onclick = populateSelectedWindow);
+    tabNodes.forEach(node => node.onclick = toggleSelectClass);
 
-    function populateSelectedWindow() {
-        const selectedTabNode = tabNodes.find(tabNode => {
+    //---->Creatig example todos<----
+    // Generate a date in the one of next 7 days
+    const randomDate = () => new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate()+Math.floor(Math.random()*7+1));
+    const exampleTodos = [
+        new CreateTodo('Social Media',`-Plan social content<br>-Build content calendar<br>-Plan promotion and distribution`, new Date(), "#DA5552"),
+        new CreateTodo("Morning Jog", `Start the day with a 20-minute jog to boost cardiovascular health and increase energy levels.`, new Date(), "#D2BF55"),
+        new CreateTodo("Yoga Sessions",`Dedicate two evenings a week to yoga practice to enhance flexibility and reduce muscle tension.`, randomDate()),
+        new CreateTodo("Networking Goals",`Attend at least one industry event per month to expand your professional network and create new opportunities.`, randomDate()),
+        new CreateTodo("Healthy Eating Plan",`Plan balanced meals and snacks, focusing on whole foods, to fuel your body and promote overall well-being.
+        Remember to adapt and adjust your to-do list as needed to ensure it remains challenging yet achievable. Regularly review your progress and celebrate your accomplishments along the way!`, randomDate())
+    ]
+
+    exampleTodos.forEach(todo => allTodos.addTodo(todo));
+    //<----   ----|
+
+    function toggleSelectClass() {
+        if (this.classList.contains("selected")) return;
+
+        const prevSelectedTabNode = tabNodes.find(tabNode => {
             return tabNode.classList.contains("selected");
-        })
+        });
+
+        prevSelectedTabNode.classList.toggle("selected");
+
+        this.classList.add('selected');
+        populateSelectedWindow(this);
+    }
+
+    function populateSelectedWindow(selectedTabNode) {
+        // const selectedTabNode = tabNodes.find(tabNode => {
+        //     return tabNode.classList.contains("selected");
+        // }) per tu fshi nqs se shkakton problem mungesa saj
+
         const todos = selectedTabNode.dataset.id === "upcoming" ?
-        allTodos :
-        tabs.find(tab => tab.id === selectedTabNode.dataset.id);
-        
-        console.log(todos);
+            allTodos.getTodos() :
+            tabs.find(tab => tab.id === selectedTabNode.dataset.id).getTodos(allTodos);
+
+        stickers.innerHTML = "";
+
+        // console.log(createSicker(todos[0]))
+        todos.forEach(todo => stickers.appendChild(createSicker(todo)));
     }
 
     function addNewTaskForm() {
@@ -187,15 +220,19 @@ function screenController() {
     }
 
     function createSicker(todo) {
-        const todoDiv = createElement('div');
-        const todoName = createElement('h2');
-        const todoDescr = createElement('p');
+        if (!todo) return;
+        const todoDiv = document.createElement('div');
+        const todoName = document.createElement('h2');
+        const todoDescr = document.createElement('p');
 
+        todoDiv.classList.add('sticker');
         todoName.textContent = todo.name;
-        todoDescr.textContent = todo.description;
+        todoDescr.innerHTML = todo.description;
 
         todoDiv.appendChild(todoName);
         todoDiv.appendChild(todoDescr);
+
+        return todoDiv;
     }
 
     // newStickerBtn.onclick = () => {
