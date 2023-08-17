@@ -123,6 +123,13 @@ function screenController() {
     exampleTodos.forEach(todo => allTodos.addTodo(todo));
     //<----   ----|
 
+    newStickerBtn.onclick = openNewTaskForm;
+    addNewListBtn.onclick = openAddListForm;
+
+    function checkForOpenedForm(){
+        return Boolean(document.querySelector('.form'));
+    }
+
     function toggleSelectClass() {
         if (this.classList.contains("selected")) return;
 
@@ -137,23 +144,67 @@ function screenController() {
     }
 
     function populateSelectedWindow(selectedTabNode) {
-        // const selectedTabNode = tabNodes.find(tabNode => {
-        //     return tabNode.classList.contains("selected");
-        // }) per tu fshi nqs se shkakton problem mungesa saj
-
         const todos = selectedTabNode.dataset.id === "upcoming" ?
             allTodos.getTodos() :
             tabs.find(tab => tab.id === selectedTabNode.dataset.id).getTodos(allTodos);
 
         stickers.innerHTML = "";
 
-        // console.log(createSicker(todos[0]))
         todos.forEach(todo => stickers.appendChild(createSicker(todo)));
     }
 
-    function addNewTaskForm() {
+    function openAddListForm() {
+        if(checkForOpenedForm()) return;
+        const formDiv = document.createElement('div');
+        formDiv.classList.add('form');
+
+        const h1 = document.createElement('h1');
+        h1.textContent  = "Create New Todo List";
+
+        const containerDiv = document.createElement('div');
+
+        const nameDiv = document.createElement('div');
+        const nameP = document.createElement('p');
+        const nameInput = document.createElement('input')
+        nameP.textContent = "Name:";
+        nameInput.type = "text";
+        nameDiv.appendChild(nameP);
+        nameDiv.appendChild(nameInput);
+
+        const colorDiv = document.createElement('div');
+        const colorP = document.createElement('p');
+        const colorInput = document.createElement('input')
+        colorP.textContent = "Color:";
+        colorInput.type = "color";
+        colorDiv.appendChild(colorP);
+        colorDiv.appendChild(colorInput);
+
+        const buttonsDiv = document.createElement('div');
+        const addBtn = document.createElement('button');
+        const cancelBtn = document.createElement('button');
+        buttonsDiv.classList.add('buttons');
+        addBtn.classList.add('add');
+        addBtn.textContent = "Add";
+        cancelBtn.classList.add('cancel');
+        cancelBtn.textContent = "Cancel";
+        buttonsDiv.appendChild(addBtn);
+        buttonsDiv.appendChild(cancelBtn);
+
+        containerDiv.appendChild(nameDiv);
+        containerDiv.appendChild(colorDiv);
+        containerDiv.appendChild(buttonsDiv);
+
+        formDiv.appendChild(h1);
+        formDiv.appendChild(containerDiv);
+
+        document.body.appendChild(formDiv);
+    }
+
+
+    function openNewTaskForm() {
+        if(checkForOpenedForm()) return;
         const newTaskDiv = document.createElement('div');
-        newTaskDiv.id = "new-sticker-form";
+        newTaskDiv.classList.add("form");
 
         const h1 = document.createElement('h1');
         h1.textContent = "Create New Task";
@@ -216,7 +267,7 @@ function screenController() {
         newTaskDiv.appendChild(h1);
         newTaskDiv.appendChild(formDiv);
 
-        return newTaskDiv;
+        document.body.appendChild(newTaskDiv);
     }
 
     function createSicker(todo) {
@@ -226,6 +277,7 @@ function screenController() {
         const todoDescr = document.createElement('p');
 
         todoDiv.classList.add('sticker');
+        todoDiv.style.backgroundColor = todo.color;
         todoName.textContent = todo.name;
         todoDescr.innerHTML = todo.description;
 
@@ -234,30 +286,5 @@ function screenController() {
 
         return todoDiv;
     }
-
-    // newStickerBtn.onclick = () => {
-    //     const newTodo = new CreateTodo(prompt('Title:'), prompt('Descrition'), new Date(prompt('Enter Dead-line:')), 'red')
-    //     allTodos.todoLibrary.push(newTodo);
-
-    //     const todoDiv = document.createElement('div')
-    //     const todoTitle = document.createElement('h2')
-    //     const todoDescription = document.createElement('p')
-
-    //     todoTitle.textContent = newTodo.name;
-    //     todoDescription.textContent = newTodo.description;
-
-    //     todoDiv.appendChild(todoTitle);
-    //     todoDiv.appendChild(todoDescription);
-    //     todoDiv.style.backgroundColor = newTodo.color;
-    //     todoDiv.classList.add('sticker');
-    //     stickers.appendChild(todoDiv);
-    // }
 }
-
-// screenController()
-
-
-// event listenerin e opsioneve ne menu lidhe me menun edhe meqenese
-// ne siperfaqe jane opsionet duke perdor e.target === obj.name hap 
-// opsionin e caktum
 // Mos harro butonin completed edhe delete

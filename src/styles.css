@@ -233,7 +233,7 @@ p {
 
 /* Add new sticker form*/
 
-#new-sticker-form {
+.form {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -245,24 +245,24 @@ p {
     box-shadow: var(--box-shadow);
 }
 
-#new-sticker-form h1 {
+.form h1 {
     text-align: center;
     margin-bottom: 3.2rem;
 }
 
-#new-sticker-form>div {
+.form>div {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
 }
 
-#new-sticker-form>div div {
+.form>div div {
     display: flex;
     gap: 1.2rem;
     align-items: center;
 }
 
-#new-sticker-form input {
+.form input {
     background-color: white;
     font-size: 1.5rem;
     font-weight: 400;
