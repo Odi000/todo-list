@@ -118,13 +118,6 @@ input {
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-/* .tasks>*:not(:first-child):active,
-.lists>*:not(:first-child):active,
-.bottom>*:active {
-    background-color: rgba(0, 0, 0, 0.15);
-    font-weight: bold;
-} */
-
 .selected {
     background-color: rgba(0, 0, 0, 0.15);
     font-weight: bold;
@@ -138,7 +131,7 @@ div {
 .square {
     width: 1.8rem;
     height: 1.8rem;
-    background-color: rgb(183, 14, 14);
+    background-color: #b90e0e;
     border-radius: .4rem;
 }
 
@@ -252,7 +245,7 @@ p {
 
 .form>div {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 2fr 1fr;
     gap: 2rem;
 }
 
