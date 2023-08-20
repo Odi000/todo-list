@@ -14,6 +14,22 @@
     --icons-clr: invert(52%) sepia(0%) saturate(167%) hue-rotate(217deg) brightness(92%) contrast(87%);
 }
 
+::-webkit-scrollbar {
+    width: 14px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: white;
+    margin-block: .5rem;
+    border-radius: 100vw;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #929292;
+    border: 4px solid white;
+    border-radius: 100vw;
+}
+
 *,
 *::after,
 *::before {
@@ -190,8 +206,49 @@ p {
     box-shadow: var(--box-shadow);
 }
 
+.sticker {
+    position: relative;
+}
+
 .sticker>h2 {
     margin-bottom: 1rem;
+}
+
+.date {
+    margin-top: 1.4rem;
+    opacity: .65;
+}
+
+.sticker
+div {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+.sticker
+img {
+    filter: 
+    invert(8%) sepia(80%) saturate(6783%) hue-rotate(6deg) brightness(83%) contrast(111%);
+    opacity: 0;
+    transition: 
+    opacity .1s ease-out,
+    scale .1s ease-out;
+}
+
+.sticker:hover
+img {
+    opacity: 1;
+}
+
+.sticker
+img:hover {
+    scale: 1.1;
+}
+
+.sticker
+img:active {
+    scale: .9;
 }
 
 .new-sticker {

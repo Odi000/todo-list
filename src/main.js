@@ -1,3 +1,5 @@
+// import trashCanSvg from './icons/trash-can-solid.svg';
+
 /*-- App Logic --*/
 
 //All created to-do's go here
@@ -20,6 +22,7 @@ class CreateTodo {
         this.date = date;
         this.color = color;
         this.parentListId = parentListId;
+        this.UID = Math.floor(Math.random() * 1000000);
     }
 }
 
@@ -115,18 +118,19 @@ function screenController() {
     const randomDate = () => new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + Math.floor(Math.random() * 7 + 1));
     const exampleTodos = [
         new CreateTodo("Healthy Eating Plan", `Plan balanced meals and snacks, focusing on whole foods, to fuel your body and promote overall well-being.
-        Remember to adapt and adjust your to-do list as needed to ensure it remains challenging yet achievable.`, randomDate(), wellBeing.color+'90', wellBeing.id),
-        new CreateTodo("Morning Jog", `Start the day with a 20-minute jog to boost cardiovascular health and increase energy levels.`, new Date(), workoutPlan.color+'90', workoutPlan.id),
-        new CreateTodo("Yoga Sessions", `Dedicate two evenings a week to yoga practice to enhance flexibility and reduce muscle tension.`, randomDate(), workoutPlan.color+'90', workoutPlan.id),
-        new CreateTodo("Strength Training", `Incorporate weightlifting three times a week to build muscle and improve overall strength.`, new Date(), workoutPlan.color+'90', workoutPlan.id),
-        new CreateTodo('Social Media', `-Plan social content<br>-Build content calendar<br>-Plan promotion and distribution`, new Date(), work.color+'90', work.id),
-        new CreateTodo("Networking Goals", `Attend at least one industry event per month to expand your professional network and create new opportunities.`, randomDate(), work.color+'90', work.id),
+        Remember to adapt and adjust your to-do list as needed to ensure it remains challenging yet achievable.`, randomDate(), wellBeing.color + '90', wellBeing.id),
+        new CreateTodo("Morning Jog", `Start the day with a 20-minute jog to boost cardiovascular health and increase energy levels.`, new Date(), workoutPlan.color + '90', workoutPlan.id),
+        new CreateTodo("Yoga Sessions", `Dedicate two evenings a week to yoga practice to enhance flexibility and reduce muscle tension.`, randomDate(), workoutPlan.color + '90', workoutPlan.id),
+        new CreateTodo("Strength Training", `Incorporate weightlifting three times a week to build muscle and improve overall strength.`, new Date(), workoutPlan.color + '90', workoutPlan.id),
+        new CreateTodo('Social Media', `-Plan social content<br>-Build content calendar<br>-Plan promotion and distribution`, new Date(), work.color + '90', work.id),
+        new CreateTodo("Networking Goals", `Attend at least one industry event per month to expand your professional network and create new opportunities.`, randomDate(), work.color + '90', work.id),
     ];
 
     exampleTodos.forEach(todo => allTodos.addTodo(todo));
 
     populateSelectedWindow(findSelectedTab());
-    //<----   ----|
+    updateCounters();
+    //<----   ----|||||
 
     //mos harro tbash updateCounters() function
 
@@ -137,6 +141,15 @@ function screenController() {
         document.querySelector('.form').remove();
     }
 
+    function updateCounters() {
+        tabNodes.forEach(node => {
+            if (node.dataset.id === 'calendar') return;
+            matchingTab = node.dataset.id === 'upcoming' ? allTodos :
+                tabs.find(tab => tab.id == node.dataset.id);
+            node.querySelector('.counter').textContent = matchingTab.getTodos(allTodos).length;
+        });
+    };
+
     function addNewTask() {
         const formInfo = getFormInfo();
         const selectedTab = findSelectedTab();
@@ -146,6 +159,7 @@ function screenController() {
         allTodos.addTodo(newTodo);
 
         populateSelectedWindow(findSelectedTab());
+        updateCounters();
         closeForm();
     }
 
@@ -227,7 +241,7 @@ function screenController() {
 
         stickers.innerHTML = "";
 
-        if(selectedTabNode.id !== 'calendar') selectedTabNode.querySelector('.counter').textContent = todos.length;
+        if (selectedTabNode.id !== 'calendar') selectedTabNode.querySelector('.counter').textContent = todos.length;
         todos.forEach(todo => stickers.appendChild(createSicker(todo)));
         stickers.appendChild(newStickerBtn);
     }
@@ -371,14 +385,39 @@ function screenController() {
         const todoDiv = document.createElement('div');
         const todoName = document.createElement('h2');
         const todoDescr = document.createElement('p');
+        const deadline = document.createElement('p');
+        const deleteBtn = document.createElement('div');
 
         todoDiv.classList.add('sticker');
         todoDiv.style.backgroundColor = todo.color;
         todoName.textContent = todo.name;
         todoDescr.innerHTML = todo.description;
 
+        const year = todo.date.getFullYear();
+        const month = todo.date.getMonth() + 1 < 10 ? "0" + (todo.date.getMonth() + 1) : todo.date.getMonth() + 1;
+        const date = todo.date.getDate() < 10 ? "0" + todo.date.getDate() : todo.date.getDate();
+
+        deadline.textContent = `${date}.${month}.${year}`;
+        deadline.classList.add('date');
+
+        const imageElement = new Image();
+        imageElement.src = './icons/trash-can-solid.svg';
+        deleteBtn.appendChild(imageElement);
+        deleteBtn.onclick = function () {
+            const todoUID = Number(this.parentElement.dataset.id);
+            const allTodosUIDs = allTodos.getTodos().map(todo => todo.UID);
+            const todoIndex = allTodosUIDs.indexOf(todoUID);
+
+            allTodos.getTodos().splice(todoIndex, 1);
+            this.parentElement.remove();
+            updateCounters();
+        };
+
         todoDiv.appendChild(todoName);
         todoDiv.appendChild(todoDescr);
+        todoDiv.appendChild(deadline);
+        todoDiv.appendChild(deleteBtn);
+        todoDiv.dataset.id = todo.UID;
 
         return todoDiv;
     }
