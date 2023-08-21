@@ -98,6 +98,7 @@ function screenController() {
         todayDiv,
         calendarDiv
     ];
+    const savedData = saveToLocalStorage();
 
     tabNodes.forEach(node => node.onclick = toggleSelectClass);
 
@@ -163,15 +164,27 @@ function screenController() {
         closeForm();
     }
 
-    function addNewList() {
-        const formInfo = getFormInfo();
+    function addNewList(e, storageInfo) {
+        const formInfo = storageInfo ? storageInfo : getFormInfo();
         if (!formInfo) return alert('Please fill out the fields!');
 
         const newList = new TodoLists(...formInfo);
         tabs.push(newList);
         addNewListToDOM(newList);
-
+        savedData.saveList(newList,'list');
         closeForm();
+    }
+
+
+    function saveToLocalStorage() {
+        let objectsSaved = 0;
+        return {
+            saveList: function (todoList, type) {
+                let toBeSaved = [type,todoList]
+                localStorage.setItem(objectsSaved, JSON.stringify(toBeSaved));
+                objectsSaved++;
+            }
+        }
     }
 
     function getFormInfo() {
