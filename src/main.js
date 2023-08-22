@@ -62,10 +62,10 @@ class Calendar {
 }
 
 class TodoLists {
-    constructor(name, color) {
+    constructor(name, color, id) {
         this.name = name;
         this.color = color;
-        this.id = Math.floor(Math.random() * 10000);
+        this.id = id ? id : Math.floor(Math.random() * 10000);
     }
     getTodos(allTodos) {
         const todos = allTodos.getTodos().filter(todo => todo.parentListId == this.id);
@@ -89,6 +89,7 @@ function screenController() {
     const stickers = document.querySelector('.stickers');
     const newStickerBtn = document.querySelector('.new-sticker');
     const addNewListBtn = document.querySelector('#add-new-list');
+    const savedData = saveToLocalStorage();
     const tabs = [
         todayTodos,
         calendar
@@ -98,7 +99,6 @@ function screenController() {
         todayDiv,
         calendarDiv
     ];
-    const savedData = saveToLocalStorage();
 
     tabNodes.forEach(node => node.onclick = toggleSelectClass);
 
@@ -132,9 +132,12 @@ function screenController() {
     populateSelectedWindow(findSelectedTab());
     updateCounters();
     //<----   ----|||||
-
+    
     //mos harro tbash updateCounters() function
 
+    //Search for stored data and retre
+    addStoredDataToDOM();
+    
     newStickerBtn.onclick = openNewTaskForm;
     addNewListBtn.onclick = openAddListForm;
 
@@ -159,30 +162,68 @@ function screenController() {
         const newTodo = new CreateTodo(...formInfo);
         allTodos.addTodo(newTodo);
 
-        populateSelectedWindow(findSelectedTab());
+        populateSelectedWindow(selectedTab);
         updateCounters();
+        savedData.save(newTodo, 'todo');
         closeForm();
     }
 
-    function addNewList(e, storageInfo) {
-        const formInfo = storageInfo ? storageInfo : getFormInfo();
+    function addNewList(e) {
+        const formInfo = getFormInfo();
         if (!formInfo) return alert('Please fill out the fields!');
 
         const newList = new TodoLists(...formInfo);
         tabs.push(newList);
         addNewListToDOM(newList);
-        savedData.saveList(newList,'list');
+        savedData.save(newList, 'list');
         closeForm();
     }
 
-
     function saveToLocalStorage() {
-        let objectsSaved = 0;
         return {
-            saveList: function (todoList, type) {
-                let toBeSaved = [type,todoList]
-                localStorage.setItem(objectsSaved, JSON.stringify(toBeSaved));
-                objectsSaved++;
+            save: function (object, type) {
+                const key = type;
+                const dataArray = localStorage.getItem(key) ?
+                    JSON.parse(localStorage.getItem(key)) : [];
+                dataArray.push(object);
+
+                localStorage.setItem(key, JSON.stringify(dataArray));
+                console.log(JSON.parse(localStorage.getItem(key)))
+            },
+            retreive: function () {
+                if (!localStorage.length) return;
+                const storedData = {};
+
+                const savedLists = localStorage.getItem('list') ?
+                    JSON.parse(localStorage.getItem('list')) : false;
+                const savedTodos = localStorage.getItem('todo') ?
+                    JSON.parse(localStorage.getItem('todo')) : false;
+
+                if (savedLists) storedData.lists = savedLists;
+                if (savedTodos) storedData.todos = savedTodos;
+
+                return storedData;
+            }
+        }
+    }
+
+    function addStoredDataToDOM() {
+        const storedData = savedData.retreive()
+        if (!storedData) return;
+
+        if (storedData.lists) {
+            for (let list of storedData.lists) {
+                list = new TodoLists(list.name, list.color, list.id);
+                tabs.push(list);
+                addNewListToDOM(list);
+            }
+        }
+        if (storedData.todos) {
+            for (let todo of storedData.todos) {
+                todo = new CreateTodo(todo.name, todo.description, new Date(todo.date), todo.color, todo.parentListId);
+                allTodos.addTodo(todo);
+                populateSelectedWindow(findSelectedTab());
+                updateCounters();
             }
         }
     }
@@ -434,5 +475,19 @@ function screenController() {
 
         return todoDiv;
     }
+}
+
+//Per neser maro butonin delete per listat duke perdor klikun e djathte
+//Po ashtu mos harro ta fshish nje todo&list nga localStorange ne momentin si i ban delete te appi
+
+function listsDeleteOption() {
+    const listsArr = document.querySelectorAll('.lists>*:not(:last-child):not(:last-child,:first-child)');
+
+    listsArr.forEach(list => {
+        list.addEventListener('contextmenu',(e)=>{
+            console.log(e);
+            e.preventDefault();
+        })
+    })
 }
 // Mos harro butonin completed edhe delete
