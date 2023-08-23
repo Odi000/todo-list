@@ -132,12 +132,12 @@ function screenController() {
     populateSelectedWindow(findSelectedTab());
     updateCounters();
     //<----   ----|||||
-    
+
     //mos harro tbash updateCounters() function
 
     //Search for stored data and retre
     addStoredDataToDOM();
-    
+
     newStickerBtn.onclick = openNewTaskForm;
     addNewListBtn.onclick = openAddListForm;
 
@@ -176,6 +176,8 @@ function screenController() {
         tabs.push(newList);
         addNewListToDOM(newList);
         savedData.save(newList, 'list');
+        //this will not work sepse do krijojn dy dive kontekstmenuje. gjej menyr tjtr
+        listsDeleteOption();
         closeForm();
     }
 
@@ -203,7 +205,18 @@ function screenController() {
                 if (savedTodos) storedData.todos = savedTodos;
 
                 return storedData;
+            },
+            remove: function (object, type) {
+                const key = type;
+                const dataArray = JSON.parse(localStorage.getItem(key));
+                const dataArrayIDs = type == 'list' ? dataArray.map(obj => obj.id) : dataArray.map(obj => obj.UID);
+                const indexOfObject = dataArrayIDs.indexOf(Number(object.dataset.id));
+
+                dataArray.splice(indexOfObject, 1);
+
+                localStorage.setItem(key, JSON.stringify(dataArray));
             }
+
         }
     }
 
@@ -388,7 +401,8 @@ function screenController() {
         dateInput.min = `${yearToday}-${monthToday}-${dateToday}`;
         dateDiv.appendChild(dateP);
         dateDiv.appendChild(dateInput);
-        //in case today tab is selected
+        //In case today tab is selected,
+        //the today date will be selected automatically in the form.
         if (selectedTab.dataset.id == 'today') {
             dateInput.disabled = true;
             dateInput.value = `${yearToday}-${monthToday}-${dateToday}`;
@@ -463,6 +477,7 @@ function screenController() {
             const todoIndex = allTodosUIDs.indexOf(todoUID);
 
             allTodos.getTodos().splice(todoIndex, 1);
+            savedData.remove(this.parentElement, 'todo');
             this.parentElement.remove();
             updateCounters();
         };
@@ -475,19 +490,42 @@ function screenController() {
 
         return todoDiv;
     }
-}
 
-//Per neser maro butonin delete per listat duke perdor klikun e djathte
-//Po ashtu mos harro ta fshish nje todo&list nga localStorange ne momentin si i ban delete te appi
+    listsDeleteOption()
+    function listsDeleteOption() {
+        const listsArr = document.querySelectorAll('.lists>*:not(:last-child):not(:last-child,:first-child)');
 
-function listsDeleteOption() {
-    const listsArr = document.querySelectorAll('.lists>*:not(:last-child):not(:last-child,:first-child)');
+        //new context menu
+        const div = document.createElement('div');
+        div.classList.add('contextmenu');
+        div.textContent = 'Delete List';
+        document.body.appendChild(div);
 
-    listsArr.forEach(list => {
-        list.addEventListener('contextmenu',(e)=>{
-            console.log(e);
-            e.preventDefault();
+        listsArr.forEach(list => {
+            list.addEventListener('contextmenu', function (e) {
+                e.preventDefault();
+
+                div.style.top = `${e.clientY}px`;
+                div.style.left = `${e.clientX}px`;
+                div.classList.remove('hidden');
+                div.onclick = () => {
+                    removeListFromTabs(this);
+                    savedData.remove(this, 'list');
+                    this.remove();
+                }
+                window.onclick = () => div.classList.add('hidden');
+            })
         })
-    })
+
+        function removeListFromTabs(listNode) {
+            const tabIDs = tabs.map(tab => tab.id);
+            const listIndex = tabIDs.indexOf(Number(listNode.dataset.id));
+            tabs.splice(listIndex, 1);
+
+            const tabNodeIDs = tabNodes.map(node => node.dataset.id);
+            const listNodeIndex = tabNodeIDs.indexOf(listNode.dataset.id);
+            tabNodes.splice(listNodeIndex, 1);
+            console.log(tabNodes);
+        }
+    }
 }
-// Mos harro butonin completed edhe delete

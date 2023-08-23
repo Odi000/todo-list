@@ -350,4 +350,22 @@ img:active {
     background-color: #f5b2b2;
 }
 
+.contextmenu {
+    user-select: none;
+    cursor: pointer;
+    position: absolute;
+    background-color: var(--main-bkg-clr);
+    padding: .6rem 1.4rem;
+    border: var(--border);
+    box-shadow: var(--box-shadow);; 
+}
+
+.contextmenu:hover {
+    background-color: var(--menu-bkg-clr);
+}
+
+.hidden {
+    display: none;
+}
+
 /* Mos harro bottom padding te tasks edhe lists */
