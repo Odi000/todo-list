@@ -8,8 +8,7 @@ import {
     TodoLists
 } from "./application_logic";
 import trashCan from "./icons/trash-can-solid.svg";
-
-
+import plus from "./icons/plus.png";
 
 //*--- Application User Interface ---*/
 
@@ -87,7 +86,7 @@ function screenController() {
         const dateInput = document.createElement('input');
 
         const xImg = new Image();
-        xImg.src = "./icons/plus.png";
+        xImg.src = plus;
         closeBtn.appendChild(xImg);
         closeBtn.onclick = closeForm;
 
