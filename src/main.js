@@ -1,4 +1,9 @@
-// import trashCanSvg from './icons/trash-can-solid.svg';
+loadImages();
+
+import "./styles.css";
+import loadImages from "./icon_loader";
+import trashCan from "./icons/trash-can-solid.svg";
+
 
 /*-- App Logic --*/
 
@@ -190,7 +195,7 @@ function screenController() {
     function updateCounters() {
         tabNodes.forEach(node => {
             if (node.dataset.id === 'calendar') return;
-            matchingTab = node.dataset.id === 'upcoming' ? allTodos :
+            const matchingTab = node.dataset.id === 'upcoming' ? allTodos :
                 tabs.find(tab => tab.id == node.dataset.id);
             node.querySelector('.counter').textContent = matchingTab.getTodos(allTodos).length;
         });
@@ -251,11 +256,6 @@ function screenController() {
                 const dataArray = JSON.parse(localStorage.getItem(key));
                 if(!dataArray) return;
                 const dataArrayIDs = type == 'list' ? dataArray.map(obj => obj.id) : dataArray.map(obj => obj.UID);
-                if(type === 'todo') {
-                    if(!object.dataset){
-                        console.log(dataArrayIDs.includes(object.UID));
-                    }
-                }
                 const indexOfObject = object.dataset ? dataArrayIDs.indexOf(Number(object.dataset.id)) : dataArrayIDs.indexOf(object.UID);
                 dataArray.splice(indexOfObject, 1);
 
@@ -356,7 +356,6 @@ function screenController() {
             tabs.find(tab => tab.id == selectedTabNode.dataset.id).getTodos(allTodos);
 
         stickers.innerHTML = "";
-        console.log(selectedTabNode);
 
         if (selectedTabNode.id !== 'calendar') selectedTabNode.querySelector('.counter').textContent = todos.length;
         todos.forEach(todo => stickers.appendChild(createSicker(todo)));
@@ -519,7 +518,7 @@ function screenController() {
         deadline.classList.add('date');
 
         const imageElement = new Image();
-        imageElement.src = './icons/trash-can-solid.svg';
+        imageElement.src = trashCan;
         deleteBtn.appendChild(imageElement);
         deleteBtn.onclick = function () {
             const todoUID = Number(this.parentElement.dataset.id);
@@ -546,6 +545,7 @@ function screenController() {
         //new context menu
         const div = document.createElement('div');
         div.classList.add('contextmenu');
+        div.classList.add('hidden');
         div.textContent = 'Delete List';
         document.body.appendChild(div);
 
