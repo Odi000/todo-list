@@ -292,7 +292,8 @@ img:active {
     padding: 2rem;
     border: var(--border);
     border-radius: 1.6rem;
-    box-shadow: var(--box-shadow);
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.10),
+    1px 1px 8px rgba(0, 0, 0, 0.08);
 }
 
 .form h1 {
@@ -366,6 +367,53 @@ img:active {
 
 .hidden {
     display: none;
+}
+
+#calendar.form {
+    padding: 3.2rem;
+}
+
+#calendar.form
+input[type="date"] {
+    background-color: #0080ff;
+    padding: 1.5rem;
+    color: white;
+    font-size: 1.8rem;
+    border: none;
+    outline: none;
+    border-radius: .5rem;
+}
+
+#calendar.form
+::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    background-color: white;
+    padding: .5rem;
+    border-radius: .3rem;
+}
+
+#calendar.form
+img {
+    transform: rotate(45deg);
+    transition: scale .1s linear;
+}
+
+#calendar.form
+img:hover {
+    scale: 1.2;
+}
+
+#calendar.form
+img:active {
+    scale: .9;
+}
+
+#calendar.form
+div {
+    position: absolute;
+    top: .8rem;
+    right: .8rem;
+    display: block;
 }
 
 /* Mos harro bottom padding te tasks edhe lists */

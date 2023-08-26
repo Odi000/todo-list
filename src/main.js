@@ -16,13 +16,13 @@ class AllTodos {
 }
 
 class CreateTodo {
-    constructor(name, description, date, color, parentListId) {
+    constructor(name, description, date, color, parentListId, uniqueID) {
         this.name = name;
         this.description = description;
         this.date = date;
         this.color = color;
         this.parentListId = parentListId;
-        this.UID = Math.floor(Math.random() * 1000000);
+        this.UID = uniqueID ? uniqueID : Math.floor(Math.random() * 1000000);
     }
 }
 
@@ -89,6 +89,7 @@ function screenController() {
     const stickers = document.querySelector('.stickers');
     const newStickerBtn = document.querySelector('.new-sticker');
     const addNewListBtn = document.querySelector('#add-new-list');
+    const deleteList = listsDeleteOption();
     const savedData = saveToLocalStorage();
     const tabs = [
         todayTodos,
@@ -103,7 +104,6 @@ function screenController() {
     tabNodes.forEach(node => node.onclick = toggleSelectClass);
 
     //---->Creatig example todos<----
-    // Generate a date in the one of next 7 days
     const work = new TodoLists('Work Related', '#b90e0e');
     tabs.push(work);
     addNewListToDOM(work);
@@ -133,13 +133,55 @@ function screenController() {
     updateCounters();
     //<----   ----|||||
 
-    //mos harro tbash updateCounters() function
+    //incorporate delete options to lists
+    const listsArr = document.querySelectorAll('.lists>*:not(:last-child):not(:last-child,:first-child)');
+    listsArr.forEach(list => list.addEventListener('contextmenu', deleteList.openContextMenu));
 
-    //Search for stored data and retre
+    //Search for stored data and retreive if there is.
     addStoredDataToDOM();
 
     newStickerBtn.onclick = openNewTaskForm;
     addNewListBtn.onclick = openAddListForm;
+    calendarDiv.onclick = openCalendarForm;
+
+    function openCalendarForm() {
+        if (checkForOpenedForm()) return;
+
+        const divContainer = document.createElement('div');
+        const closeBtn = document.createElement('div');
+        const dateInput = document.createElement('input');
+
+        const xImg = new Image();
+        xImg.src = "./icons/plus.png";
+        closeBtn.appendChild(xImg);
+        closeBtn.onclick = closeForm;
+
+        dateInput.type = 'date';
+        const yearToday = new Date().getFullYear();
+        const monthToday = new Date().getMonth() + 1 < 10 ? "0" + (new Date().getMonth() + 1) : new Date().getMonth() + 1;
+        const dateToday = new Date().getDate() < 10 ? "0" + new Date().getDate() : new Date().getDate();
+        dateInput.min = `${yearToday}-${monthToday}-${dateToday}`;
+        dateInput.onchange = function() {
+            calendarDiv.dataset.date = this.value;
+
+            const prevSelectedTabNode = findSelectedTab();
+
+            prevSelectedTabNode.classList.toggle("selected");
+    
+            calendarDiv.classList.add('selected');
+            populateSelectedWindow(findSelectedTab());
+            closeForm();
+        }
+
+
+        divContainer.id = "calendar";
+        divContainer.classList.add('form');
+
+        divContainer.appendChild(dateInput);
+        divContainer.appendChild(closeBtn);
+
+        document.body.appendChild(divContainer);
+    }
 
     function closeForm() {
         document.querySelector('.form').remove();
@@ -177,7 +219,6 @@ function screenController() {
         addNewListToDOM(newList);
         savedData.save(newList, 'list');
         //this will not work sepse do krijojn dy dive kontekstmenuje. gjej menyr tjtr
-        listsDeleteOption();
         closeForm();
     }
 
@@ -190,7 +231,6 @@ function screenController() {
                 dataArray.push(object);
 
                 localStorage.setItem(key, JSON.stringify(dataArray));
-                console.log(JSON.parse(localStorage.getItem(key)))
             },
             retreive: function () {
                 if (!localStorage.length) return;
@@ -209,9 +249,14 @@ function screenController() {
             remove: function (object, type) {
                 const key = type;
                 const dataArray = JSON.parse(localStorage.getItem(key));
+                if(!dataArray) return;
                 const dataArrayIDs = type == 'list' ? dataArray.map(obj => obj.id) : dataArray.map(obj => obj.UID);
-                const indexOfObject = dataArrayIDs.indexOf(Number(object.dataset.id));
-
+                if(type === 'todo') {
+                    if(!object.dataset){
+                        console.log(dataArrayIDs.includes(object.UID));
+                    }
+                }
+                const indexOfObject = object.dataset ? dataArrayIDs.indexOf(Number(object.dataset.id)) : dataArrayIDs.indexOf(object.UID);
                 dataArray.splice(indexOfObject, 1);
 
                 localStorage.setItem(key, JSON.stringify(dataArray));
@@ -233,7 +278,7 @@ function screenController() {
         }
         if (storedData.todos) {
             for (let todo of storedData.todos) {
-                todo = new CreateTodo(todo.name, todo.description, new Date(todo.date), todo.color, todo.parentListId);
+                todo = new CreateTodo(todo.name, todo.description, new Date(todo.date), todo.color, todo.parentListId, todo.UID);
                 allTodos.addTodo(todo);
                 populateSelectedWindow(findSelectedTab());
                 updateCounters();
@@ -273,6 +318,7 @@ function screenController() {
         containerDiv.dataset.id = newList.id;
         containerDiv.dataset.color = newList.color;
         containerDiv.onclick = toggleSelectClass;
+        containerDiv.addEventListener('contextmenu', deleteList.openContextMenu);
 
         tabNodes.push(containerDiv);
 
@@ -302,11 +348,15 @@ function screenController() {
     }
 
     function populateSelectedWindow(selectedTabNode) {
-        const todos = selectedTabNode.dataset.id === "upcoming" ?
+        const todos = 
+            selectedTabNode.dataset.id === "upcoming" ?
             allTodos.getTodos() :
+            selectedTabNode.dataset.id === "calendar" ?
+            calendar.getTodos(allTodos,selectedTabNode.dataset.date):
             tabs.find(tab => tab.id == selectedTabNode.dataset.id).getTodos(allTodos);
 
         stickers.innerHTML = "";
+        console.log(selectedTabNode);
 
         if (selectedTabNode.id !== 'calendar') selectedTabNode.querySelector('.counter').textContent = todos.length;
         todos.forEach(todo => stickers.appendChild(createSicker(todo)));
@@ -491,9 +541,7 @@ function screenController() {
         return todoDiv;
     }
 
-    listsDeleteOption()
     function listsDeleteOption() {
-        const listsArr = document.querySelectorAll('.lists>*:not(:last-child):not(:last-child,:first-child)');
 
         //new context menu
         const div = document.createElement('div');
@@ -501,10 +549,9 @@ function screenController() {
         div.textContent = 'Delete List';
         document.body.appendChild(div);
 
-        listsArr.forEach(list => {
-            list.addEventListener('contextmenu', function (e) {
+        return {
+            openContextMenu: function (e) {
                 e.preventDefault();
-
                 div.style.top = `${e.clientY}px`;
                 div.style.left = `${e.clientX}px`;
                 div.classList.remove('hidden');
@@ -514,18 +561,32 @@ function screenController() {
                     this.remove();
                 }
                 window.onclick = () => div.classList.add('hidden');
-            })
-        })
+            }
+        }
 
         function removeListFromTabs(listNode) {
+            if (findSelectedTab() === listNode) tabNodes[0].classList.add('selected');
+
             const tabIDs = tabs.map(tab => tab.id);
             const listIndex = tabIDs.indexOf(Number(listNode.dataset.id));
+            const thisListTodos = tabs[listIndex].getTodos(allTodos);
+            thisListTodos.forEach(todo => {
+                if(!todo) return;
+                const index = allTodos.getTodos().indexOf(todo);
+                savedData.remove(allTodos.getTodos()[index], 'todo');
+                allTodos.getTodos().splice(index, 1);
+            });
             tabs.splice(listIndex, 1);
-
             const tabNodeIDs = tabNodes.map(node => node.dataset.id);
             const listNodeIndex = tabNodeIDs.indexOf(listNode.dataset.id);
             tabNodes.splice(listNodeIndex, 1);
-            console.log(tabNodes);
+
+            populateSelectedWindow(findSelectedTab());
+            updateCounters();
+        }
+
+        function deleteListTodos(todos) {
+
         }
     }
 }
