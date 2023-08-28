@@ -9,6 +9,7 @@ import {
 } from "./application_logic";
 import trashCan from "./icons/trash-can-solid.svg";
 import plus from "./icons/plus.png";
+import favIcon from "./icons/check-list.png";
 
 //*--- Application User Interface ---*/
 
@@ -73,10 +74,21 @@ function screenController() {
 
     //Search for stored data and retreive if there is.
     addStoredDataToDOM();
+    //Add fav icon link to head
+    addFavIcon();
 
     newStickerBtn.onclick = openNewTaskForm;
     addNewListBtn.onclick = openAddListForm;
     calendarDiv.onclick = openCalendarForm;
+
+    function addFavIcon() {
+        const link = document.createElement('link');
+        link.rel = "icon";
+        link.type = "image/x-icon"
+        link.href = favIcon;
+
+        document.head.appendChild(link);
+    }
 
     function openCalendarForm() {
         if (checkForOpenedForm()) return;
